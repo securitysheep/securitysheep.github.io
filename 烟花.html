@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Fireworks with Random Color</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworksCanvas"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let fireworks = [];
+
+        // Firework particle object
+        class Particle {
+            constructor(x, y, angle, speed) {
+                this.x = x;
+                this.y = y;
+                this.angle = angle;
+                this.speed = speed;
+                this.alpha = 1;
+                this.gravity = 0.02;
+                this.friction = 0.98;
+                this.length = Math.random() * 20 + 30;  // Longer lines
+                this.colorStep = 0;  // Step for color transition
+            }
+
+            update() {
+                // Update position
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed + this.gravity;
+                this.speed *= this.friction;  // Slow down over time
+                this.alpha -= 0.01;  // Fade over time
+                this.colorStep += 0.05;  // Gradually increase step for color transition
+            }
+
+            draw(gradientColor) {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                // Draw a line based on the angle and length of the particle
+                ctx.lineTo(this.x - Math.cos(this.angle) * this.length, 
+                           this.y - Math.sin(this.angle) * this.length);
+
+                // Apply a gradient effect for the particle
+                const gradient = ctx.createLinearGradient(this.x, this.y, 
+                    this.x - Math.cos(this.angle) * this.length, 
+                    this.y - Math.sin(this.angle) * this.length);
+                gradient.addColorStop(0, gradientColor[0]);  // Bright color
+                gradient.addColorStop(1, gradientColor[1]);  // Dark color
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Generate a random gradient color
+        function getRandomGradientColor() {
+            const hue = Math.floor(Math.random() * 360);  // Random hue for different color each time
+            const brightColor = `hsl(${hue}, 100%, 70%)`;  // Bright starting color
+            const darkColor = `hsl(${hue}, 100%, 40%)`;    // Darker ending color
+            return [brightColor, darkColor];
+        }
+
+        // Create fireworks explosion
+        function createFirework(x, y) {
+            const numberOfParticles = 100;  // Number of particles per explosion
+            const angleStep = (Math.PI * 2) / numberOfParticles;
+            const gradientColor = getRandomGradientColor();  // Get a random gradient color for each firework
+            for (let i = 0; i < numberOfParticles; i++) {
+                const angle = i * angleStep;
+                const speed = Math.random() * 4 + 4;  // Speed of explosion
+                fireworks.push({
+                    particle: new Particle(x, y, angle, speed),
+                    gradient: gradientColor
+                });
+            }
+        }
+
+        // Update and draw fireworks
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const firework = fireworks[i];
+                firework.particle.update();
+                firework.particle.draw(firework.gradient);
+
+                if (firework.particle.alpha <= 0) {
+                    fireworks.splice(i, 1);  // Remove the firework once it fades out
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Handle canvas resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Randomly create fireworks on mouse click
+        window.addEventListener('click', (e) => {
+            createFirework(e.clientX, e.clientY);
+        });
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
