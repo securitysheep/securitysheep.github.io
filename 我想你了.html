@@ -17,22 +17,26 @@
 
         /* 设置文字样式 */
         .message {
-            font-size: 200px; /* 设置字体大小 */
+            font-size: 150px; /* 设置字体大小 */
             color: pink; /* 文字颜色为粉色 */
             font-weight: bold; /* 加粗文字 */
             text-align: center; /* 文字居中 */
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* 增加文字阴影 */
-            /* animation: blink 1s infinite; 添加闪烁动画 */
-            letter-spacing: 20px; /* 设置文字之间的间距 */
+            animation: blink 2s infinite ease-in-out; /* 添加闪烁动画，使用ease-in-out曲线 */
+            writing-mode: vertical-rl; /* 将文字垂直排列 */
+            letter-spacing: 20px; /* 设置字与字之间的距离 */
         }
 
         /* 闪烁动画的关键帧 */
         @keyframes blink {
-            0%, 100% {
-                opacity: 1;
+            0% {
+                opacity: 1; /* 清晰 */
             }
-            50% {
-                opacity: 0;
+            70% {
+                opacity: 0.2; /* 模糊（接近消失），时间较长 */
+            }
+            100% {
+                opacity: 1; /* 快速恢复清晰 */
             }
         }
     </style>
