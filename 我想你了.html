@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我想你了</title>
+    <style>
+        /* 设置整个页面居中 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        /* 设置文字样式 */
+        .message {
+            font-size: 200px; /* 设置字体大小 */
+            color: pink; /* 文字颜色为粉色 */
+            font-weight: bold; /* 加粗文字 */
+            text-align: center; /* 文字居中 */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* 增加文字阴影 */
+            /* animation: blink 1s infinite; 添加闪烁动画 */
+            letter-spacing: 20px; /* 设置文字之间的间距 */
+        }
+
+        /* 闪烁动画的关键帧 */
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 显示内容 -->
+    <div class="message">我想你了</div>
+</body>
+</html>
