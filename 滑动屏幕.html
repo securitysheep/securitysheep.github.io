@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多屏提示</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lobster&display=swap" rel="stylesheet">
+    <style>
+        /* 全局样式 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            animation: fadeIn 2s ease forwards;
+        }
+
+        /* 字体颜色柔和 */
+        .message span {
+            font-family: 'Lobster', cursive;
+            font-size: 100px;
+            color: #ff6b81;
+            display: block; /* 改为block，保证文字上下排布 */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .message span:nth-child(1) { animation-delay: 0.2s; }
+        .message span:nth-child(2) { animation-delay: 0.4s; }
+        .message span:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 页面背景渐变 */
+        .slide-1 {
+            background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+        }
+        .slide-2 {
+            background: linear-gradient(120deg, #89f7fe, #66a6ff);
+        }
+        .slide-3 {
+            background: linear-gradient(120deg, #ffecd2, #fcb69f);
+        }
+
+        /* 嵌套纵向滑动 - 第一屏背景 */
+        .vertical-swiper .slide-2-1 {
+            background: linear-gradient(120deg, #a18cd1, #fbc2eb);
+        }
+
+        /* 嵌套纵向滑动 - 第二屏背景 */
+        .vertical-swiper .slide-2-2 {
+            background: linear-gradient(120deg, #a769dd, #125074);
+        }
+
+        /* 最后一屏文字样式 */
+        .final-message {
+            font-family: 'Lobster', cursive;
+            font-size: 150px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            color: #ff6b81;
+            text-align: center;
+            line-height: 1.2;
+            animation: scaleUp 1.5s infinite alternate;
+        }
+
+        .final-message span {
+            display: block;
+            font-size: 120px;
+        }
+
+        @keyframes scaleUp {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* 烟花效果 */
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            animation: fireworksAnimation 2s infinite;
+        }
+
+        @keyframes fireworksAnimation {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(2);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fireworks" id="fireworks"></div>
+
+    <!-- Swiper 容器 -->
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <!-- 第一屏 -->
+            <div class="swiper-slide slide-1">
+                <div class="message">
+                    <span>女王快看看</span>
+                    <span>右边</span>
+                </div>
+            </div>
+
+            <!-- 第二屏 - 嵌套纵向滑动 -->
+            <div class="swiper-slide slide-2">
+                <div class="vertical-swiper swiper">
+                    <div class="swiper-wrapper">
+                        <!-- 嵌套的第一屏 -->
+                        <div class="swiper-slide slide-2-1">
+                            <div class="message">
+                                <span>听说下面</span>
+                                <span>有惊喜</span>
+                            </div>
+                        </div>
+                        <!-- 嵌套的第二屏 -->
+                        <div class="swiper-slide slide-2-2">
+                            <div class="message">
+                                <span>惊喜在右边呢</span>
+                                <span>宝宝</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三屏 -->
+            <div class="swiper-slide slide-3">
+                <div class="final-message">
+                    <span>睿婷宝宝</span>
+                    <span>一路平安！</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // 初始化横向 Swiper
+        var mainSwiper = new Swiper('.swiper', {
+            direction: 'horizontal', // 横向滑动
+            slidesPerView: 1,
+            spaceBetween: 0,
+            keyboard: {
+                enabled: true, // 启用键盘控制
+            },
+        });
+
+        // 初始化嵌套纵向 Swiper（仅第二屏上）
+        var verticalSwiper = new Swiper('.vertical-swiper', {
+            direction: 'vertical', // 纵向滑动
+            slidesPerView: 1,
+            mousewheel: true, // 启用鼠标滚轮
+            keyboard: {
+                enabled: true, // 启用键盘控制
+            },
+            nested: true, // 声明为嵌套 Swiper
+        });
+
+        // 烟花效果
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            const size = Math.random() * 10 + 5; // 随机大小
+            firework.style.width = `${size}px`;
+            firework.style.height = `${size}px`;
+            firework.style.left = `${Math.random() * window.innerWidth * 0.6 + window.innerWidth * 0.2}px`; // 更加靠近中间
+            firework.style.top = `${Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2}px`; // 更加靠近中间
+            document.getElementById('fireworks').appendChild(firework);
+            setTimeout(() => firework.remove(), 2000);
+        }
+
+        setInterval(createFirework, 100); // 每100ms生成一个烟花
+    </script>
+</body>
+</html>
