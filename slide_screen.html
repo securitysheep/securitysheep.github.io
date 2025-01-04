@@ -23,6 +23,7 @@
 
         .swiper-slide {
             display: flex;
+            flex-direction: column; /* 设置为纵向排列 */
             justify-content: center;
             align-items: center;
             font-size: 50px;
@@ -35,7 +36,7 @@
         /* 字体颜色柔和 */
         .message span {
             font-family: 'Lobster', cursive;
-            font-size: 100px;
+            font-size: 90px;
             color: #ff6b81;
             display: block; /* 改为block，保证文字上下排布 */
             opacity: 0;
@@ -90,9 +91,50 @@
             font-size: 80px;
         }
 
+        .final-message .big-text {
+            font-size: 80px; /* 大字体 */
+        }
+
+        .final-message .small-text {
+            font-size: 60px; /* 小字体 */
+        }
+
         @keyframes scaleUp {
             0% { transform: scale(1); }
             100% { transform: scale(1.1); }
+        }
+
+        /* 最后一屏爱心样式 */
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px; /* 文字和爱心之间的间距 */
+            animation: bounce 2s infinite;
+        }
+
+        .heart {
+            width: 200px;
+            height: 200px;
+            fill: #FF6B81;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
         }
 
         /* 烟花效果 */
@@ -140,8 +182,9 @@
             <!-- 第一屏 -->
             <div class="swiper-slide slide-1">
                 <div class="message">
-                    <span>女王快看看</span>
-                    <span>右边</span>
+                    <span>女王快</span>
+                    <span>看看</span>
+                    <span>右边➔</span>
                 </div>
             </div>
 
@@ -152,14 +195,16 @@
                         <!-- 嵌套的第一屏 -->
                         <div class="swiper-slide slide-2-1">
                             <div class="message">
-                                <span>听说下面</span>
+                                <span>听说</span>
+                                <span>下面⬇</span>
                                 <span>有惊喜</span>
                             </div>
                         </div>
                         <!-- 嵌套的第二屏 -->
                         <div class="swiper-slide slide-2-2">
                             <div class="message">
-                                <span>惊喜在右边呢</span>
+                                <span>惊喜在</span>
+                                <span>右边➔</span>
                                 <span>宝宝</span>
                             </div>
                         </div>
@@ -170,8 +215,13 @@
             <!-- 第三屏 -->
             <div class="swiper-slide slide-3">
                 <div class="final-message">
-                    <span>睿婷宝宝</span>
-                    <span>一路平安！</span>
+                    <span class="big-text">睿婷宝宝</span>
+                    <span class="small-text">一路平安💖</span>
+                </div>
+                <div class="heart-container">
+                    <svg class="heart" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M512 923c-13.1 0-26.2-5-36.2-15L154 594.3c-84-82.8-84-217.1 0-299.9 82.7-81.5 216.3-81.5 299 0l59 58.2 59-58.2c82.7-81.5 216.3-81.5 299 0 84 82.8 84 217.1 0 299.9L548.2 908c-10 10-23.1 15-36.2 15z" fill="#FF6B81"/>
+                    </svg>
                 </div>
             </div>
         </div>
@@ -208,12 +258,13 @@
             firework.style.width = `${size}px`;
             firework.style.height = `${size}px`;
             firework.style.left = `${Math.random() * window.innerWidth * 0.6 + window.innerWidth * 0.2}px`; // 更加靠近中间
-            firework.style.top = `${Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2}px`; // 更加靠近中间
+            firework.style.top = `${Math.random() * window.innerHeight}px`;
             document.getElementById('fireworks').appendChild(firework);
-            setTimeout(() => firework.remove(), 2000);
+
+            setTimeout(() => firework.remove(), 2000); // 移除 DOM
         }
 
-        setInterval(createFirework, 100); // 每100ms生成一个烟花
+        setInterval(createFirework, 300); // 每 300ms 创建一个新烟花
     </script>
 </body>
 </html>
